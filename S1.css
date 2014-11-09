@@ -1,0 +1,317 @@
+/*Basic CSS Layout for Graeme s1 */
+
+/* basic elements */
+body {
+	text-align: center;
+}
+
+img {
+	border-width: 0;
+}
+
+/* Main page ordering and navigation */
+#container {
+	position: relative;
+	
+	margin: 0 auto;
+	width: 758px;
+	text-align: left;
+	border:1px solid #000000;
+	background:#ffffff;
+}
+
+#header {
+	width: 100%;
+	height: 250px;
+	position: float;
+	top: 0px;
+	border-bottom: 1px solid #000000;
+}
+
+#header .titletext {
+	width: 300px;
+	position: absolute;
+	top: 20px;
+	left: 50px;
+
+	color: #333333;
+	font-family: Copperplate / Copperplate Gothic Light, sans-serif;
+	font-size: 60px;
+	line-height: 1.2;
+}
+
+#quickbar {
+	width: 100%;
+	height: 25px;
+	position: float;
+	top: 0px;
+	border-bottom: 1px solid #000000;
+	background: #f2f5ff;
+
+	text-align: center;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 17px;
+	line-height: 1.2;
+}
+
+#sidebar {
+	width: 95px;
+	position: absolute;
+	left: -97px;
+	top: 276px;
+	border: 1px solid #000000;
+	padding-bottom:5px;
+	background: #f2f5ff;
+
+	text-align: center;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 17px;
+	line-height: 1.2;
+}
+
+#sidebar .DnDNav {
+	background: #7da7d9;
+	color: #ffffff;
+	font-size: 20px;
+}
+
+#sidebar .DnDsbar {
+	background: #000000;
+	width: 100%;
+	height: 1px;
+}
+
+#main {
+	width: 100%;
+	position: float;
+	padding: 5px;
+
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 17px;
+	line-height: 1.2;
+}
+
+#footer {
+	font-size: small;
+	font-style: italic;
+	text-align: center;
+	clear: both;
+	width: 100%
+}
+
+
+/* Front page madness - navigation + picture randomization */
+#home-container {
+	width: 700px;
+	margin: 10px auto;
+	overflow: hidden;
+}
+
+#home-split {
+	width: 160px;
+	height: 160px;
+	margin: 10px 10px 10px -10px;
+	float: left;
+	text-align: center;
+	font-weight: bold;
+	font-size: 30px;
+	line-height: 100px;
+	color: white;
+}
+
+#home-split:hover {
+	opacity: 0.6; /* css standard */
+	filter: alpha(opacity=60); /* internet explorer */
+}
+
+#home-split:nth-child(n+1) {
+	margin: 10px 0 0 10px;
+	background: darkblue;
+}
+
+#home-split:nth-child(n+5) {
+	margin: 10px 0 0 10px;
+	background: limegreen;
+}
+
+#home-split:nth-child(n+9) {
+	margin: 10px 0 0 10px;
+	background: crimson;
+}
+
+#home-split:nth-child(n+13) {
+	margin: 10px 0 0 10px;
+	background: gold;
+}
+
+#home-split:nth-child(n+17) {
+	margin: 10px 0 0 10px;
+	background: indigo;
+}
+
+/* link styling */
+a
+{
+	font-weight: normal;
+	font-size: 19px;
+	color: #363636;
+}
+
+a:hover {
+	font-weight: normal;
+	color: #e00c0c;
+}
+
+a.tiny {
+	font-size: 10px;
+	font-weight: bold;
+}
+
+a.table
+{
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+}
+
+a.table:hover
+{
+	color: #003663;
+}
+
+/*List styling */
+ul, li
+{
+}
+
+li
+{
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+}
+
+/*Table styling */
+/*Minimalist Table 1*/
+#tab-minimalist {
+	line-height: 1.6em;
+	border-collapse: collapse;
+	text-align: left;
+}
+
+#tab-minimalist th {
+	padding: 0px 0px 0px 0px;
+       	font-size: 14px;
+}
+
+#tab-minimalist td {
+	padding: 0px 0px 0px 20px;
+       	font-size: 12px;
+}
+
+#tab-minimalist tbody tr:hover td
+{
+	color: #003663;
+}
+
+
+/*Minimalist Table 2*/
+#tab-minimalist-s {
+	line-height: 1em;
+	border-collapse: collapse;
+	text-align: left;
+}
+
+#tab-minimalist-s th {
+	padding: 0px 0px 0px 0px;
+       	font-size: 12px;
+	width: 100px;
+	vertical-align: text-top;
+}
+
+#tab-minimalist-s td {
+	padding: 0px 0px 0px 40px;
+       	font-size: 12px;
+	vertical-align: text-top;
+}
+
+#tab-minimalist-s tbody tr:hover td
+{
+	color: #003663;
+}
+
+/*Basic table for lots of vertical entries w/ lines*/
+#tab-base {
+ 	line-height: 1em;
+	font-size: 12px;
+	width: 746px;
+	border-collapse: collapse;
+	text-align: left;
+}
+
+#tab-base th {
+	font-size: 14px;
+	font-weight: normal;
+	color: #000000;
+	padding: 10px 8px;
+	border-bottom: 2px solid #000000;
+}
+
+#tab-base td {
+	color: #00000;
+	padding: 9px 8px 0px 8px;
+}
+
+#tab-base tbody tr:hover td
+{
+	color: #003663;
+}
+
+
+
+/*Horizontal line */
+#niceline {
+	width: 746px;
+	height:1px;
+	background-color:#000000;
+}
+
+
+/*Specific font styling (titles, etc.) */
+#ltitle {
+	background: #003663;
+	color: #ffffff;
+	font-size: 20px;
+	text-align:center;
+	width: 746px;
+	border:1px solid #000000;
+}
+
+#tab_in {
+	padding-left: 30px
+}
+
+#stitle {
+	font-size: 18px;
+	text-decoration:underline;
+}
+
+#sstitle {
+	text-decoration:underline;
+}
+
+#sstitle2 {
+	text-decoration:underline;
+	font-size: 12px;
+	padding: 10px 0px 0px 0px;
+}
+
+#tiny {
+	font-size: 10px;
+	font-weight: bold;
+}
+
+#small {
+	font-size: 12px;
+	padding: 0px 5px 5px 0px;
+}
