@@ -286,46 +286,43 @@ class gDND extends gPage {
             #Displaying all story info
             ?>
             <div id='ltitle'><? echo $SID_Iquery[$major_index]['sname']; ?></a></div>
-            <i>Adventure started on: &nbsp; <? echo $SID_Iquery[$major_index]['date']; ?></i>
-            <br /><br />
-            
-            <? #Short Description ?>
-            <div id='sstitle'>Short Description</div>
-            <? echo $SID_Iquery[$major_index]['sdesc'] . '<br /><br />'; ?>
-            
-            <? #Characters ?>
-            <div id='sstitle'>Characters</div>
-            <?            
+            <table id='tab-minimalist' summary='Adventure Info'>
+            <?
+            echo '<tr><th>Adventure Start Date:</th><td>' . $SID_Iquery[$major_index]['date'] . '</td></tr>';
+            echo '<tr><th>Brief Description:</th><td>' . $SID_Iquery[$major_index]['sdesc'] . '</td></tr>';
+               
+            echo '<tr><th>Characters:</th><td>';
             $CIDs = explode('-', $SID_Iquery[$major_index]['charIDs']);
-            echo '<ul>';
             for ($i=0; $i < count($CIDs); $i++)
             {
                 $char_name = $this->getCharName($page_db, $CIDs[$i], 2);
-                echo '<li>' . $char_name . '</li>';
+                echo $char_name;
+                if ($i < count($CIDs) - 1)
+                {
+                    echo '<br />';
+                }
             }
-            echo '</ul>';
+            echo '</td></tr>';
             
             #Saving detailed description for later 
             $long_desc = $SID_Iquery[$major_index]['ldesc'];
             #Kicking out the major query entry from the array
             unset($SID_Iquery[$major_index]);
             
-            #Looping through associated minor stories
-            ?> 
-            <div id='sstitle'>Minor Misadventures</div>
-            <?
-            echo '<ul>';
+            echo '<tr><th>Minor Misadventures:</th><td>';
             for ($i=0; $i < count($minor_SIDs); $i++)
             {
-                echo '<li><i>- ' . $SID_Iquery[$minor_SIDs[$i]]['sname'] . '</i>: &nbsp;' . $SID_Iquery[$minor_SIDs[$i]]['sdesc'] . ' <br />';
+                echo '<i>' . $SID_Iquery[$minor_SIDs[$i]]['sname'] . '</i>: &nbsp;' . $SID_Iquery[$minor_SIDs[$i]]['sdesc'] . ' <br />';
                 ?> <div id='tab_in'>Details: <?
-                echo $SID_Iquery[$minor_SIDs[$i]]['ldesc'] . '</div></li>';
+                echo $SID_Iquery[$minor_SIDs[$i]]['ldesc'] . '</div>';
             }
-            echo '</ul>';
+            echo '</td></tr>';
+            echo '</table>';
             
             #Printing long description of story
             ?>
-            <div id='sstitle'>Long Description</div>
+            <div id='sstitle'>Long Description</div>  
+            <br />
             <?
             echo $long_desc;
         }
@@ -465,41 +462,41 @@ class gDND extends gPage {
             $CID_Iquery = $page_db->Select('SELECT cname, pc, pname, ally, sdesc, height, weight, haircol, eyecol, clothes, location, backstory FROM gdnd_char WHERE CID = ' . $CID_s);
             #Displaying all the char info prettily
             ?>
-                <div id='ltitle'>Character Info:  <? echo $CID_Iquery[0]["cname"]; ?></div>
-                <table id='tab-minimalist' summary='Character Info'>
-                <?
-                    echo '<tr><th>Full Name:</th><td>' . $CID_Iquery[0]['cname'] . '</td></tr>';
-                    if ($CID_Iquery[0]['pc']==1)
-                    {
-                        echo '<tr><th>Played by:</th><td>' . $CID_Iquery[0]['pname'] . '</td></tr>';
-                    }
-                    echo '<tr><th>Brief Description:</th><td>' . $CID_Iquery[0]['sdesc'] . '</td></tr>';
-                    echo '</table>';
-                    if ($CID_Iquery[0]['ally']==1)
-                    {
-                        echo '<div id="small"><i>Friend of the liberation army</i></div>';
-                    }
-                    echo '<div id="niceline"></div>';
-                ?>
-                <div id='sstitle2'>Character Traits</div>   
-                <table id='tab-minimalist-s' summary='Character Info 2'>
-                <?
-                    echo '<tr><th>Height:</th><td>' . $CID_Iquery[0]['height'] . ' cm</td></tr>';
-                    echo '<tr><th>Weight:</th><td>' . $CID_Iquery[0]['weight'] . ' kg</td></tr>';
-                    echo '<tr><th>Hair Colour:</th><td>' . $CID_Iquery[0]['haircol'] . '</td></tr>';
-                    echo '<tr><th>Eye Colour:</th><td>' . $CID_Iquery[0]['eyecol'] . '</td></tr>';
-                    echo '<tr><th>Clothes:</th><td>' . $CID_Iquery[0]['clothes'] . '</td></tr>';
-                    echo '<tr><th>Location:</th><td>' . $CID_Iquery[0]['location'] . '</td></tr>';
-                    echo '<tr><th>Backstory:</th></td>' . $CID_Iquery[0]['backstory'] . '</td></tr>';       
-                ?>
-                </table>
-                <div id='sstitle2'>Abilities</div>  
-                <br />
-                <div id='sstitle2'>Inventory</div>
-                <br />
-                <div id='niceline'></div>       
-                <div id='tiny'>Navigate to:</div>
-                <a class='tiny' href='index.php?id=dnd&sub=char'>Full PC/NPC List</a> <br />
+            <div id='ltitle'>Character Info:  <? echo $CID_Iquery[0]["cname"]; ?></div>
+            <table id='tab-minimalist' summary='Character Info'>
+            <?
+                echo '<tr><th>Full Name:</th><td>' . $CID_Iquery[0]['cname'] . '</td></tr>';
+                if ($CID_Iquery[0]['pc']==1)
+                {
+                    echo '<tr><th>Played by:</th><td>' . $CID_Iquery[0]['pname'] . '</td></tr>';
+                }
+                echo '<tr><th>Brief Description:</th><td>' . $CID_Iquery[0]['sdesc'] . '</td></tr>';
+                echo '</table>';
+                if ($CID_Iquery[0]['ally']==1)
+                {
+                    echo '<div id="small"><i>Friend of the liberation army</i></div>';
+                }
+                echo '<div id="niceline"></div>';
+            ?>
+            <div id='sstitle2'>Character Traits</div>   
+            <table id='tab-minimalist-s' summary='Character Info 2'>
+            <?
+                echo '<tr><th>Height:</th><td>' . $CID_Iquery[0]['height'] . ' cm</td></tr>';
+                echo '<tr><th>Weight:</th><td>' . $CID_Iquery[0]['weight'] . ' kg</td></tr>';
+                echo '<tr><th>Hair Colour:</th><td>' . $CID_Iquery[0]['haircol'] . '</td></tr>';
+                echo '<tr><th>Eye Colour:</th><td>' . $CID_Iquery[0]['eyecol'] . '</td></tr>';
+                echo '<tr><th>Clothes:</th><td>' . $CID_Iquery[0]['clothes'] . '</td></tr>';
+                echo '<tr><th>Location:</th><td>' . $CID_Iquery[0]['location'] . '</td></tr>';
+                echo '<tr><th>Backstory:</th></td>' . $CID_Iquery[0]['backstory'] . '</td></tr>';       
+            ?>
+            </table>
+            <div id='sstitle2'>Abilities</div>  
+            <br />
+            <div id='sstitle2'>Inventory</div>
+            <br />
+            <div id='niceline'></div>       
+            <div id='tiny'>Navigate to:</div>
+            <a class='tiny' href='index.php?id=dnd&sub=char'>Full PC/NPC List</a> <br />
                 
             <?
         }

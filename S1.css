@@ -210,11 +210,15 @@ div + ul {
 #tab-minimalist th {
 	padding: 0px 0px 0px 0px;
        	font-size: 14px;
+       	text-align: left;
+       	vertical-align: top;
 }
 
 #tab-minimalist td {
 	padding: 0px 0px 0px 20px;
        	font-size: 12px;
+       	text-align: left;
+        vertical-align: top;
 }
 
 #tab-minimalist tbody tr:hover td
