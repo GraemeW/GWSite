@@ -10,38 +10,44 @@ if (isset($_GET['id'])) {
 	if ($pageID == '' || $pageID == 'home')
 	{
 		$gPage = new gHome();
-		$gPage->setPageType("home");
+		$gPage->setPageType('home');
 		$gPage->getPageDetails($gpage_db);
 	}
 	elseif ($pageID == 'dnd')
 	{
 		$gPage = new gDND();
-		$gPage->setPageType("dnd");
+		$gPage->setPageType('dnd');
 		$gPage->getPageDetails($gpage_db);
 	}
 	elseif ($pageID == 'read')
 	{
 		$gPage = new gRead();
-		$gPage->setPageType("read");
+		$gPage->setPageType('read');
 		$gPage->getPageDetails($gpage_db);
 	}
 	elseif ($pageID == 'research')
 	{
 		$gPage = new gResearch();
-		$gPage->setPageType("research");
+		$gPage->setPageType('research');
 		$gPage->getPageDetails($gpage_db);
 	}
 	elseif ($pageID == 'fit')
 	{
 		$gPage = new gFit();
-		$gPage->setPageType("fit");
+		$gPage->setPageType('fit');
 		$gPage->getPageDetails($gpage_db);
 	}
+    elseif ($pageID == 'comp')
+    {
+        $gPage = new gComp();
+        $gPage->setPageType('comp');
+        $gPage->getPageDetails($gpage_db);
+    }
 	else
 	{
 		$pageID = 'home';
 		$gPage = new gHome();
-		$gPage->setPageType("home");
+		$gPage->setPageType('home');
 		$gPage->getPageDetails($gpage_db);
 	}
 }
@@ -49,7 +55,7 @@ else
 {
 	$pageID = 'home';
 	$gPage = new gHome();
-	$gPage->setPageType("home");
+	$gPage->setPageType('home');
 	$gPage->getPageDetails($gpage_db);
 }
 
@@ -60,11 +66,11 @@ else
 ?>
 
 <body>
-<div id="container">
+<div id='container'>
 	<?php
 		$gPage->generate_header();
 	?>
-	<div id="main">
+	<div id='main'>
 		<?php
 		$gPage->generate_content($gpage_db);
 
