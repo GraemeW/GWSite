@@ -191,6 +191,14 @@ li
 	list-style-type: none;
 }
 
+p + ul {
+    margin-top: 0px;
+}
+
+div + ul {
+    margin-top: 0px;
+}
+
 /*Table styling */
 /*Minimalist Table 1*/
 #tab-minimalist {

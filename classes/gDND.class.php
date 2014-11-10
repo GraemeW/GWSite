@@ -160,7 +160,7 @@ class gDND extends gPage {
         echo '<br />';
     }
 
-    #Pull individual stories - implemented by fct generate_escapades
+    #Pull listed stories - implemented by fct generate_escapades
     private function pull_stories($page_db, $chron, $sp, $spn)
     {
         #Splitting page into groups of major storylines ($story_perpage)
@@ -195,24 +195,27 @@ class gDND extends gPage {
         {
             ?>
             <div id='stitle'><? echo '<a href="index.php?id=dnd&sub=story&SID=' . $major_query[$i]['SID'] . '">' . $major_query[$i]['sname']; ?></a></div>
-            <div id='tab_in'>
             <i>Adventure started on: &nbsp; <? echo $major_query[$i]['date']; ?></i><br />
-            Characters involved: &nbsp; <?
+            <div id='tab_in'>
+            <? #Characters ?>
+            <div id='sstitle'>Characters</div>
+            <?            
             $CIDs = explode('-', $major_query[$i]['charIDs']);
             echo '<ul>';
             for ($j=0; $j < count($CIDs); $j++)
             {
-                echo '<li>' . $CIDs[$j] . '</li>';
+                $char_name = $this->getCharName($page_db, $CIDs[$j], 2);
+                echo '<li>' . $char_name . '</li>';
             }
             echo '</ul>';
-            echo $major_query[$i]['sdesc'] . '<br />';
+            echo $major_query[$i]['sdesc'] . '<br /><br />';
 
             $minor_query = $page_db->Select('SELECT SID, sname, sdesc, charIDs, date FROM gdnd_story WHERE majormin=0 AND sparentID=' . $major_query[$i]['SID'] . ' ORDER BY date');
 
             if (!empty($minor_query))
             {
-                echo '<ul>';
                 ?> <div id='sstitle'>Minor Misadventures</div><?
+                echo '<ul>';
                 for ($j=0; $j<count($minor_query); $j++)
                 {
                     echo '<li><i>- &nbsp; &nbsp;' . $minor_query[$j]['sname'] . '</i>: &nbsp;' . $minor_query[$j]['sdesc'] . '</li>';
@@ -239,7 +242,7 @@ class gDND extends gPage {
 
         #Error checking on input value
         #If legit value not provided, go to the main story page
-        $SID_query = $page_db->Select('SELECT SID FROM gdnd_story');
+        $SID_query = $page_db->Select('SELECT SID FROM gdnd_story WHERE majormin = 1');
         $SID_vals = [];
         for ($i = 0; $i < count($SID_query); $i++)
         {
@@ -263,55 +266,68 @@ class gDND extends gPage {
         else
         {
             #DB select for individual character information
-            $SID_Iquery = $page_db->Select('SELECT SID, sname, majormin, sdesc, ldesc, charIDs, date FROM gdnd_story WHERE SID = ' . $SID_s . ' OR sparentID = ' . $SID_s);
+            $SID_Iquery = $page_db->Select('SELECT SID, sname, majormin, sdesc, ldesc, charIDs, date FROM gdnd_story WHERE SID = ' . $SID_s . ' OR sparentID = ' . $SID_s . ' ORDER BY date');
 
             #Identifying position of the SID entry in the query array
-            #This should be first position, but just making sure    
+            #This should be first position, but just making sure
+            $minor_SIDs = [];    
             for ($i=0; $i < count($SID_Iquery); $i++)
             {
                 if($SID_Iquery[$i]['majormin']==1)
                 {
                     $major_index = $i;
-                }   
+                }
+                else
+                {
+                    array_push($minor_SIDs,$i); 
+                }                       
             }
 
-            #Displaying all the char info prettily
+            #Displaying all story info
             ?>
             <div id='ltitle'><? echo $SID_Iquery[$major_index]['sname']; ?></a></div>
-            <div id='tab_in'>
-            <i>Adventure started on: &nbsp; <? echo $SID_Iquery[$major_index]['date']; ?></i><br />
-            Characters involved: &nbsp; <?
+            <i>Adventure started on: &nbsp; <? echo $SID_Iquery[$major_index]['date']; ?></i>
+            <br /><br />
+            
+            <? #Short Description ?>
+            <div id='sstitle'>Short Description</div>
+            <? echo $SID_Iquery[$major_index]['sdesc'] . '<br /><br />'; ?>
+            
+            <? #Characters ?>
+            <div id='sstitle'>Characters</div>
+            <?            
             $CIDs = explode('-', $SID_Iquery[$major_index]['charIDs']);
             echo '<ul>';
-            for ($j=0; $j < count($CIDs); $j++)
+            for ($i=0; $i < count($CIDs); $i++)
             {
-                echo '<li>' . $CIDs[$j] . '</li>';
+                $char_name = $this->getCharName($page_db, $CIDs[$i], 2);
+                echo '<li>' . $char_name . '</li>';
             }
             echo '</ul>';
-            echo $SID_Iquery[$major_index]['sdesc'] . '<br />';
-
-            $minor_query = $page_db->Select('SELECT SID, sname, sdesc, charIDs, date FROM gdnd_story WHERE majormin=0 AND sparentID=' . $major_query[$i]['SID'] . ' ORDER BY date');
-
-            if (!empty($minor_query))
+            
+            #Saving detailed description for later 
+            $long_desc = $SID_Iquery[$major_index]['ldesc'];
+            #Kicking out the major query entry from the array
+            unset($SID_Iquery[$major_index]);
+            
+            #Looping through associated minor stories
+            ?> 
+            <div id='sstitle'>Minor Misadventures</div>
+            <?
+            echo '<ul>';
+            for ($i=0; $i < count($minor_SIDs); $i++)
             {
-                echo '<ul>';
-                ?> <div id='sstitle'>Minor Misadventures</div><?
-                for ($j=0; $j<count($minor_query); $j++)
-                {
-                    echo '<li><i>- &nbsp; &nbsp;' . $minor_query[$j]['sname'] . '</i>: &nbsp;' . $minor_query[$j]['sdesc'] . '</li>';
-                }
-                echo '</ul>';
+                echo '<li><i>- ' . $SID_Iquery[$minor_SIDs[$i]]['sname'] . '</i>: &nbsp;' . $SID_Iquery[$minor_SIDs[$i]]['sdesc'] . ' <br />';
+                ?> <div id='tab_in'>Details: <?
+                echo $SID_Iquery[$minor_SIDs[$i]]['ldesc'] . '</div></li>';
             }
-            echo '</div>';
-        
-        ?>
-        <div id="ltitle">The Story as We Know It</div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tortor est, vehicula vel augue vel, consectetur elementum tortor. Curabitur ultrices metus et nisi tempor, et tincidunt ipsum semper. Duis est mi, tempus id lorem non, ullamcorper ullamcorper lorem. Nulla sit amet molestie enim. Aliquam ac sollicitudin neque. Sed non dapibus velit. Vestibulum pharetra, turpis vitae venenatis bibendum, dui mi consequat orci, vel auctor odio tellus et lorem. Suspendisse eget ipsum nec purus iaculis placerat in non tortor. Quisque mollis porta ultricies. Duis scelerisque magna non lorem ultricies tincidunt in et nibh. Fusce lobortis condimentum dignissim. Etiam eleifend condimentum interdum. Suspendisse ut molestie risus, at auctor quam. Aliquam varius massa vitae ipsum pretium mollis.</p>
-
-        <p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at pellentesque nisi, in faucibus libero. In porta consectetur felis, tempus vehicula est pretium non. Donec a velit et dui convallis cursus in nec ante. Suspendisse accumsan tortor quis ligula gravida lacinia. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean condimentum tellus at purus sagittis mollis. Aliquam consequat magna rhoncus lectus lacinia, ac vulputate erat mollis. Suspendisse pharetra viverra tortor ut dignissim. Praesent a arcu nisl. Mauris venenatis consectetur libero, a suscipit elit. Donec venenatis dui ullamcorper semper ornare. Etiam nec lacus neque. Vestibulum hendrerit elit magna, et lobortis magna blandit sed.</p> 
-
-        <br />
-        <?
+            echo '</ul>';
+            
+            #Printing long description of story
+            ?>
+            <div id='sstitle'>Long Description</div>
+            <?
+            echo $long_desc;
         }
     }
     
@@ -322,6 +338,34 @@ class gDND extends gPage {
     #------------------------------------------------------------------------------------------------------
     #CHARACTER SPECIFIC
     #------------------------------------------------------------------------------------------------------
+    
+    private function getCharName($page_db, $CID, $linkset)
+    {
+        #Input parameters:  Database parameter, character ID, linkset
+        #Output parameter:  Character name
+        
+        #linkset:  0 for no link, 1 for standard link, 2 for table font link
+        $cname_query = $page_db->Select('SELECT cname FROM gdnd_char WHERE CID = ' . $CID);
+        if ($linkset==0)
+        {
+            return $cname_query[0]['cname'];
+        }
+        elseif($linkset==1)
+        {
+            $linked_char = '<a href="index.php?id=dnd&sub=char&CID=' . strval($CID) . '">' . $cname_query[0]['cname'] . '</a>';
+            return $linked_char;
+        }
+        elseif($linkset==2)
+        {
+            $linked_char = '<a href="index.php?id=dnd&sub=char&CID=' . strval($CID) . '" class="table">' . $cname_query[0]['cname'] . '</a>';
+            return $linked_char;
+        }
+        else
+        {
+            $linked_char = '<a href="index.php?id=dnd&sub=char&CID=' . strval($CID) . '">' . $cname_query[0]['cname'] . '</a>';
+            return $linked_char;
+        }
+    }
     
     private function getMChar($page_db)
     {
