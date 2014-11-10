@@ -149,6 +149,11 @@ img {
 	background: indigo;
 }
 
+.overtop {
+    position: relative; 
+    width: 100%; /* for IE 6 */   
+}
+
 /* link styling */
 a
 {
@@ -204,6 +209,7 @@ a.table-purple:hover
 {
     color: #464646;
 }
+
 
 /*List styling */
 ul, li
@@ -352,4 +358,15 @@ div + ul {
 #small {
 	font-size: 12px;
 	padding: 0px 5px 5px 0px;
+}
+
+h2 span {
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   color: white; 
+   font: bold 18px/24px Helvetica, Sans-Serif;
+   
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7); 
 }
