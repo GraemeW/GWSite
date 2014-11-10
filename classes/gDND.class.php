@@ -208,6 +208,9 @@ class gDND extends gPage {
                 echo '<li>' . $char_name . '</li>';
             }
             echo '</ul>';
+
+            #Brief Description
+            ?><div id='sstitle'>Brief Description</div><?
             echo $major_query[$i]['sdesc'] . '<br /><br />';
 
             $minor_query = $page_db->Select('SELECT SID, sname, sdesc, charIDs, date FROM gdnd_story WHERE majormin=0 AND sparentID=' . $major_query[$i]['SID'] . ' ORDER BY date');
