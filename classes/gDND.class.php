@@ -369,14 +369,27 @@ class gDND extends gPage {
         echo '<div id="ltitle">Characters of Relative Importance</div>';
 
         #Grabbing all of the PCs
-        $PC_query = $page_db->Select('SELECT CID, cname, pname, sdesc FROM gdnd_char WHERE pc=1');
+        $PC_query = $page_db->Select('SELECT CID, cname, pname, sdesc, status FROM gdnd_char WHERE pc=1');
 
         echo '<div id="stitle">Player Characters</div>';
         echo '<table id="tab-base"><thead><tr><th scope="col">Name</th><th scope="col">Player</th><th scope="col">Description</th></tr></thead><tbody>';
         for ($i = 0; $i < count($PC_query); $i++)
         {
             echo '<tr>';
-            echo '<td><a href="index.php?id=dnd&sub=char&CID=' . strval($PC_query[$i]['CID']) . '" class="table">' . $PC_query[$i]['cname'] . '</a></td>';
+            #Changing font colour depending on character status - 0 is dead, 1 is alive, 2 is missing
+            if ($PC_query[$i]['status']==0)
+            {
+                $font_class = 'table-red';
+            }
+            elseif ($PC_query[$i]['status']==2) 
+            {
+	            $font_class = 'table-purple';
+            }
+            else
+            {
+                $font_class = 'table';    
+            }
+            echo '<td><a href="index.php?id=dnd&sub=char&CID=' . strval($PC_query[$i]['CID']) . '" class="' . $font_class . '">' . $PC_query[$i]['cname'] . '</a></td>';
             echo '<td>' . $PC_query[$i]['pname'] . '</td>';
             echo '<td>' . $PC_query[$i]['sdesc'] . '</td>';
             echo '</tr>';
@@ -384,7 +397,7 @@ class gDND extends gPage {
         echo '</tbody></table><br /><br />';
 
         #Grabbing all of the NPCs
-        $NPC_query = $page_db->Select('SELECT CID, cname, ally, sdesc FROM gdnd_char WHERE pc=0 ORDER BY ally');
+        $NPC_query = $page_db->Select('SELECT CID, cname, ally, sdesc, status FROM gdnd_char WHERE pc=0 ORDER BY ally');
 
 
         echo '<div id="stitle">Non-Playable Characters</div>';
@@ -392,7 +405,20 @@ class gDND extends gPage {
         for ($i = 0; $i < count($NPC_query); $i++)
         {
             echo '<tr>';
-            echo '<td><a href="index.php?id=dnd&sub=char&CID=' . strval($NPC_query[$i]['CID']) . '" class="table">' . $NPC_query[$i]['cname'] . '</a></td>';
+            #Changing font colour depending on character status - 0 is dead, 1 is alive, 2 is missing
+            if ($NPC_query[$i]['status']==0)
+            {
+                $font_class = 'table-red';
+            }
+            elseif ($NPC_query[$i]['status']==2) 
+            {
+                $font_class = 'table-purple';
+            }
+            else
+            {
+                $font_class = 'table';    
+            }
+            echo '<td><a href="index.php?id=dnd&sub=char&CID=' . strval($NPC_query[$i]['CID']) . '" class="' . $font_class . '">' . $NPC_query[$i]['cname'] . '</a></td>';
             echo '<td>';
             if ($NPC_query[$i]['ally']==1)
             {
@@ -459,7 +485,7 @@ class gDND extends gPage {
         else
         {
             #DB select for individual character information
-            $CID_Iquery = $page_db->Select('SELECT cname, pc, pname, ally, sdesc, height, weight, haircol, eyecol, clothes, location, backstory FROM gdnd_char WHERE CID = ' . $CID_s);
+            $CID_Iquery = $page_db->Select('SELECT cname, pc, pname, ally, sdesc, status, height, weight, haircol, eyecol, clothes, location, backstory FROM gdnd_char WHERE CID = ' . $CID_s);
             #Displaying all the char info prettily
             ?>
             <div id='ltitle'>Character Info:  <? echo $CID_Iquery[0]["cname"]; ?></div>
@@ -470,6 +496,24 @@ class gDND extends gPage {
                 {
                     echo '<tr><th>Played by:</th><td>' . $CID_Iquery[0]['pname'] . '</td></tr>';
                 }
+                echo '<tr><th>Character Status:</th><td>';
+                if ($CID_Iquery[0]['status']==1)
+                {
+                    echo 'Alive and well';
+                }
+                elseif($CID_Iquery[0]['status']==0)
+                {
+                    echo 'Deceased';
+                }
+                elseif($CID_Iquery[0]['status']==2)
+                {
+                    echo 'Unknown';
+                }
+                else
+                {
+                    echo 'Unknown';
+                }
+                echo '</td></tr>';
                 echo '<tr><th>Brief Description:</th><td>' . $CID_Iquery[0]['sdesc'] . '</td></tr>';
                 echo '</table>';
                 if ($CID_Iquery[0]['ally']==1)
