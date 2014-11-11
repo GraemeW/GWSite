@@ -43,6 +43,12 @@ if (isset($_GET['id'])) {
         $gPage->setPageType('comp');
         $gPage->getPageDetails($gpage_db);
     }
+    elseif ($pageID == 'game')
+    {
+        $gPage = new gGame();
+        $gPage->setPageType('game');
+        $gPage->getPageDetails($gpage_db);
+    }
 	else
 	{
 		$pageID = 'home';
